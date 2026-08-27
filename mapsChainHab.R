@@ -1,6 +1,7 @@
 #load libraries
 library(magrittr)
 library(tidyverse)
+library(here)
 
 #read in our parasite data
 paraDisAgg <- here::here("paraData_disAgg.csv")
