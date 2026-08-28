@@ -73,9 +73,6 @@ loc <- helminthR::locations
 h %<>% dplyr::as_tibble()
 h %<>% dplyr::rename(Parasite.species=parasiteScientificName)
 
-#cleave off parasite higher taxonomic data to join later with h and y
-pTax <- h %>% dplyr::select(starts_with("parasite",ignore.case=T)) %>% dplyr::distinct()
-pTax %<>% dplyr::select(-c(parasiteStatus,parasiteSuperfamily,parasiteSpecies)) %>% dplyr::distinct()
 #establish parasites in common (our data and helminthR)
 commonParas <- base::intersect(y$Parasite.species,h$Parasite.species)
 
@@ -157,7 +154,7 @@ h %<>% dplyr::mutate(Parasite.species=if_else(Parasite.species=="Echinorhynchus 
 #get vec of all parasite species
 paraSpp <- y %>% pull(Parasite.species)
 
-#taxQuery <- classification(paraSpp, db = "gbif")
+#taxQuery <- taxize::classification(paraSpp, db = "gbif")
 #save(taxQuery,file="get_taxQuery.Rda")
 load("get_taxQuery.Rda")
 
