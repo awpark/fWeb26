@@ -22,8 +22,7 @@ paraMap <- ggplot() +
   coord_fixed(1.3) + 
   # Apply clean styling
   theme_minimal() +
-  labs(title = "Parasite locations by habitat and chain length",
-       x = "Longitude", 
+  labs(x = "Longitude", 
        y = "Latitude",
        color = "Habitat")+scale_color_manual(values=c("darkgreen","darkblue","darkorange"))+
   #facet

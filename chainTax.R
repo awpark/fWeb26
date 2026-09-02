@@ -63,4 +63,6 @@ plot.cv.fw <- x.cv %>% dplyr::filter(hab=="fw") %>% ggplot(.,aes(x=taxScale,y=av
 plot.cv.mar <- x.cv %>% dplyr::filter(hab=="mar") %>% ggplot(.,aes(x=taxScale,y=avCV))+geom_col(fill="darkblue")+ylab("Mean CV (chain length)")+xlab("Taxonomic rank")+coord_flip()+ggtitle("Marine")+ylim(0,0.275)
 plot.cv.ter <- x.cv %>% dplyr::filter(hab=="ter") %>% ggplot(.,aes(x=taxScale,y=avCV))+geom_col(fill="darkorange")+ylab("Mean CV (chain length)")+xlab("Taxonomic rank")+coord_flip()+ggtitle("Terrestrial")+ylim(0,0.275)
 
-(plot.cv.fw/plot.cv.mar/plot.cv.ter)
+chainTaxPlot <- (plot.cv.fw/plot.cv.mar/plot.cv.ter)
+
+ggsave("chainTaxPlot.png",chainTaxPlot,width=8,height=6,dpi=300,units="in")

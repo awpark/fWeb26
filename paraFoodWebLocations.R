@@ -88,19 +88,26 @@ distTable <- y %>% dplyr::group_by(Host.habitat) %>% reframe(probs=c(0.25,0.5,0.
   gt::fmt_number(columns=starts_with("prob_"),decimals=1) %>%
   gt::row_order(prob_0.5,reverse=F) %>%
   gt::tab_header(
-    title = "Quantiles of nearest foodweb by habitat (km)"
-  ) %>%
+    title = md("Quantiles of nearest food<br>web by habitat (km)")
+    ) %>%
   gt::cols_label(
     Host.habitat = "Host Habitat",
     prob_0.25 = "0.25",
     prob_0.5 = "0.5",
     prob_0.75 = "0.75"
   ) %>%
-  gt::tab_options(table.font.size = px(12))
+  gt::tab_options(table.font.size = px(12),
+                  heading.title.font.size = px(14))%>%
+  gt::cols_width(
+    Host.habitat ~ px(100),
+    prob_0.25 ~ px(50),
+    prob_0.5 ~ px(50),
+    prob_0.75 ~ px(50),
+    )
 
 distTbl <- as_gtable(distTable)
 
-pfMap + 
+pfMapAndInset <- pfMap + 
   inset_element(distTbl,
                 left=0.6,
                 bottom=0.24,
@@ -109,3 +116,4 @@ pfMap +
                 align_to="plot",
                 clip=F)
 
+ggsave("paraFwebMap.png",pfMapAndInset,width=12,height=8,dpi=300,units="in")
