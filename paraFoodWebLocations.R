@@ -5,6 +5,8 @@ library(magrittr)
 library(tidyverse)
 library(here)
 library(geosphere)
+library(gt)
+library(patchwork)
 
 # source file for para data
 para <- here::here("dataPrep.R")
@@ -31,8 +33,7 @@ pfMap <- ggplot() +
   coord_fixed(1.3) + 
   # Apply clean styling
   theme_minimal() +
-  labs(title = "Parasite and foodweb locations",
-       x = "Longitude", 
+  labs(x = "Longitude", 
        y = "Latitude",
        color = "Habitat")+scale_color_manual(values=c("darkgreen","darkblue","darkorange"))+
   theme(axis.text.x=element_text(size=14),
@@ -94,16 +95,17 @@ distTable <- y %>% dplyr::group_by(Host.habitat) %>% reframe(probs=c(0.25,0.5,0.
     prob_0.25 = "0.25",
     prob_0.5 = "0.5",
     prob_0.75 = "0.75"
-  )
+  ) %>%
+  gt::tab_options(table.font.size = px(12))
 
 distTbl <- as_gtable(distTable)
 
 pfMap + 
   inset_element(distTbl,
                 left=0.6,
-                bottom=0.22,
+                bottom=0.24,
                 right=0.65,
-                top=0.24,
+                top=0.26,
                 align_to="plot",
                 clip=F)
 
