@@ -214,3 +214,4 @@ y %<>% dplyr::left_join(.,taxQueryDf)
 #create csv files of h and y
 write_csv(h,file="paraData_disAgg.csv")
 write_csv(y,file="paraData_agg.csv")
+file.remove("helminths.csv") # helminthR creates this file and it causes github issues
