@@ -26,7 +26,14 @@ paraMap <- ggplot() +
        y = "Latitude",
        color = "Habitat")+scale_color_manual(values=c("darkgreen","darkblue","darkorange"))+
   #facet
-  facet_wrap(~Chain.length)
+  facet_wrap(~Chain.length)+
+  theme(axis.text.x=element_text(size=14),
+        axis.title.x=element_text(size=18),
+        axis.text.y=element_text(size=14),
+        axis.title.y=element_text(size=18),
+        legend.title=element_text(size=18),
+        legend.text=element_text(size=18),
+        strip.text=element_text(size=18))
 
 ggsave("paraMap.png",paraMap,dpi=300,width=12,height=8,units="in")
 
