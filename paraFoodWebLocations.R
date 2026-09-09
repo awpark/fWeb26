@@ -16,6 +16,10 @@ source(para)
 fWeb <- here::here("foodWebAgg.R")
 source(fWeb)
 
+#set consistent habitat levels
+h %<>% dplyr::mutate(Host.habitat=factor(Host.habitat,levels=c("terrestrial","freshwater","marine")))
+fwAgg %<>% dplyr::mutate(Habitat=factor(Habitat,levels=c("terrestrial","freshwater","marine")))
+
 #invoke world map
 worldMap <- ggplot2::map_data("world")
 #Build the map and overlay the color-coded coordinates
@@ -35,11 +39,14 @@ pfMap <- ggplot() +
   theme_minimal() +
   labs(x = "Longitude", 
        y = "Latitude",
-       color = "Habitat")+scale_color_manual(values=c("darkgreen","darkblue","darkorange"))+
+       color = "Habitat")+scale_color_manual(labels=c("Terrestrial","Freshwater","Marine"),
+                                             values=c("darkorange","darkgreen","darkblue"))+
   theme(axis.text.x=element_text(size=14),
         axis.title.x=element_text(size=18),
         axis.text.y=element_text(size=14),
-        axis.title.y=element_text(size=18))
+        axis.title.y=element_text(size=18),
+        legend.title=element_text(size=18),
+        legend.text=element_text(size=14))
 
 
 
