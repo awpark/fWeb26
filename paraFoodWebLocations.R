@@ -18,6 +18,7 @@ source(fWeb)
 
 #set consistent habitat levels
 h %<>% dplyr::mutate(Host.habitat=factor(Host.habitat,levels=c("terrestrial","freshwater","marine")))
+y %<>% dplyr::mutate(Host.habitat=factor(Host.habitat,levels=c("terrestrial","freshwater","marine")))
 fwAgg %<>% dplyr::mutate(Habitat=factor(Habitat,levels=c("terrestrial","freshwater","marine")))
 
 #invoke world map
@@ -93,7 +94,6 @@ distTable <- y %>% dplyr::group_by(Host.habitat) %>% reframe(probs=c(0.25,0.5,0.
   ) %>%
   gt::gt() %>%
   gt::fmt_number(columns=starts_with("prob_"),decimals=1) %>%
-  gt::row_order(prob_0.5,reverse=F) %>%
   gt::tab_header(
     title = md("Quantiles of nearest food<br>web by habitat (km)")
     ) %>%
@@ -110,7 +110,16 @@ distTable <- y %>% dplyr::group_by(Host.habitat) %>% reframe(probs=c(0.25,0.5,0.
     prob_0.25 ~ px(50),
     prob_0.5 ~ px(50),
     prob_0.75 ~ px(50),
-    )
+    ) %>%
+  gt::sub_values(
+    values="terrestrial",replacement="Terrestrial"
+  ) %>%
+  gt::sub_values(
+    values="freshwater",replacement="Freshwater"
+  ) %>%
+  gt::sub_values(
+    values="marine",replacement="Marine"
+  )
 
 distTbl <- as_gtable(distTable)
 
