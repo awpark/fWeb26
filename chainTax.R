@@ -9,7 +9,6 @@ paraData <- here::here("paraData_agg.csv")
 chain <- readr::read_csv(paraData,
                        locale=locale(encoding="latin1"))
 
-
 #FW
 #meanCV
 fw.cv.genus <- chain %>% dplyr::filter(Host.habitat=="freshwater") %>% group_by(parasiteGenus) %>% reframe(l=sd(Chain.length)/mean(Chain.length)) %>% summarize(mean(l,na.rm=T))
@@ -59,10 +58,47 @@ x.cv %<>% dplyr::mutate(taxScale=factor(taxScale,levels=c("Genus",
                                                           "Class",
                                                           "Phylum")))
 #plot mean CV
-plot.cv.fw <- x.cv %>% dplyr::filter(hab=="fw") %>% ggplot(.,aes(x=taxScale,y=avCV))+geom_col(fill="darkgreen")+ylab("Mean CV (chain length)")+xlab("Taxonomic rank")+coord_flip()+ggtitle("Freshwater")+ylim(0,0.275)
-plot.cv.mar <- x.cv %>% dplyr::filter(hab=="mar") %>% ggplot(.,aes(x=taxScale,y=avCV))+geom_col(fill="darkblue")+ylab("Mean CV (chain length)")+xlab("Taxonomic rank")+coord_flip()+ggtitle("Marine")+ylim(0,0.275)
-plot.cv.ter <- x.cv %>% dplyr::filter(hab=="ter") %>% ggplot(.,aes(x=taxScale,y=avCV))+geom_col(fill="darkorange")+ylab("Mean CV (chain length)")+xlab("Taxonomic rank")+coord_flip()+ggtitle("Terrestrial")+ylim(0,0.275)
+plot.cv.mar <- x.cv %>% dplyr::filter(hab=="mar") %>%
+  ggplot(.,aes(x=taxScale,y=avCV))+
+  geom_col(fill="darkblue")+
+  xlab("Taxonomic rank")+
+  ylab("Mean CV (lifecycle length)")+
+  ggtitle("Marine")+
+  ylim(0,0.275)+
+  theme_minimal()+
+  scale_y_continuous(expand=expansion(mult=c(0,0)))+
+  coord_flip()
 
-chainTaxPlot <- (plot.cv.fw/plot.cv.mar/plot.cv.ter)
+plot.cv.fw <- x.cv %>% dplyr::filter(hab=="fw") %>%
+  ggplot(.,aes(x=taxScale,y=avCV))+
+  geom_col(fill="darkgreen")+
+  xlab("Taxonomic rank")+
+  ggtitle("Freshwater")+
+  ylim(0,0.275)+
+  theme_minimal()+
+  theme(
+    axis.title.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank()
+  )+
+  scale_y_continuous(expand=expansion(mult=c(0,0)))+
+  coord_flip()
+
+plot.cv.ter <- x.cv %>% dplyr::filter(hab=="ter") %>%
+  ggplot(.,aes(x=taxScale,y=avCV))+
+  geom_col(fill="darkorange")+
+  xlab("Taxonomic rank")+
+  ggtitle("Terrestrial")+
+  ylim(0,0.275)+
+  theme_minimal()+
+  theme(
+    axis.title.x=element_blank(),
+    axis.text.x=element_blank(),
+    axis.ticks.x=element_blank()
+  )+
+  scale_y_continuous(expand=expansion(mult=c(0,0)))+
+  coord_flip()
+
+chainTaxPlot <- (plot.cv.ter/plot.cv.fw/plot.cv.mar)
 
 ggsave("chainTaxPlot.png",chainTaxPlot,width=8,height=6,dpi=300,units="in")
