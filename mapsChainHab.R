@@ -8,25 +8,35 @@ paraDisAgg <- here::here("paraData_disAgg.csv")
 h <- readr::read_csv(paraDisAgg,
                      locale=locale(encoding="latin1"))
 
+#set consistent habitat levels
+h %<>% dplyr::mutate(Host.habitat=factor(Host.habitat,levels=c("terrestrial","freshwater","marine")))
+
+#define new labels for faceting
+newLabels <- c("1"="Lifecycle length: 1",
+               "2"="Lifecycle length: 2",
+               "3"="Lifecycle length: 3",
+               "4"="Lifecycle length: 4")
+
 #invoke world map
 worldMap <- ggplot2::map_data("world")
 #Build the map and overlay the color-coded coordinates
 paraMap <- ggplot() +
   # Draw the background map
-  geom_polygon(data = worldMap, aes(x = long, y = lat, group = group), 
-               fill = "grey60", color = "white") +
-  # Add the coordinates and color them by the 'region' category
-  geom_point(data = h, aes(x =Longitude,y=Latitude,color=Host.habitat), 
-             size = 3, alpha = 0.2) +
+  geom_polygon(data=worldMap,aes(x=long,y=lat,group=group), 
+               fill="grey60",color="white") +
+  # Add the coordinates and color them by habitat
+  geom_point(data=h,aes(x=Longitude,y=Latitude,color=Host.habitat), 
+             size=3,alpha=0.2) +
   # Keep correct geographic map proportions
   coord_fixed(1.3) + 
   # Apply clean styling
   theme_minimal() +
   labs(x = "Longitude", 
        y = "Latitude",
-       color = "Habitat")+scale_color_manual(values=c("darkgreen","darkblue","darkorange"))+
-  #facet
-  facet_wrap(~Chain.length)+
+       color = "Habitat")+scale_color_manual(labels=c("Terrestrial","Freshwater","Marine"),
+                                             values=c("darkorange","darkgreen","darkblue"))+
+  #facet by chain length
+  facet_wrap(~Chain.length,labeller=labeller(Chain.length=newLabels))+
   theme(axis.text.x=element_text(size=14),
         axis.title.x=element_text(size=18),
         axis.text.y=element_text(size=14),
